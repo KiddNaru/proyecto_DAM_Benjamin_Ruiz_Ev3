@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "347402133753",
+    "project_id": "br-dam-2026",
+    "storage_bucket": "br-dam-2026.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:347402133753:android:3448c11df669c9cc768228",
+        "android_client_info": {
+          "package_name": "cl.saorza_label_chile.proyecto_moviles"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "347402133753-05iu3kat9tkf498kedus1vr8q6ii3hc1.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "cl.saorza_label_chile.proyecto_moviles",
+            "certificate_hash": "305269441c768e5a94136f11019718abf1770404"
+          }
+        },
+        {
+          "client_id": "347402133753-4lh19u2168j4iv6va56r07f4i48u48up.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAWtk6jxNOYgp1VdrejuloXrD879KlpxNY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "347402133753-4lh19u2168j4iv6va56r07f4i48u48up.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
