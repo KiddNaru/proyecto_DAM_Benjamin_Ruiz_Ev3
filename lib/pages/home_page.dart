@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_application_1/pages/publicar_page.dart';
 import '../services/fs_service.dart';
 
 class HomePage extends StatelessWidget {
@@ -77,6 +78,17 @@ class HomePage extends StatelessWidget {
             )
           ],
         ),
+      ),
+
+      floatingActionButton: FloatingActionButton(
+
+        backgroundColor: Color.fromARGB(255, 194, 216, 249,),
+
+        onPressed: () {
+          Navigator.push(context, MaterialPageRoute(builder: (context) => PublicarPage()));
+        },
+
+        child: Icon(Icons.add),
       ),
     );
   }
