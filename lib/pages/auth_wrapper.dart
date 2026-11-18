@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_application_1/pages/home_page.dart';
 import 'package:flutter_application_1/pages/login_page.dart';
 
 class AuthWrapper extends StatelessWidget {
@@ -18,11 +19,7 @@ class AuthWrapper extends StatelessWidget {
         }
 
         if (snapshot.hasData){
-          return const Scaffold(
-            body: Center(
-              child: Text('Sesion Iniciada')
-            ),
-          );
+          return HomePage();
         }
 
         return LoginPage();

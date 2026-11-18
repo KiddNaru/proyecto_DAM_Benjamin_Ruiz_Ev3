@@ -34,14 +34,26 @@ class LoginPage extends StatelessWidget {
                   try {
 
                     GoogleSignInAccount googleUser = await GoogleSignIn.instance.authenticate();
+                    GoogleSignInAuthentication googleAuth = googleUser.authentication;
+                    final credential = GoogleAuthProvider.credential(idToken: googleAuth.idToken);
+
+                    await FirebaseAuth.instance.signInWithCredential(credential);
 
                   } catch (e){
+
+                    debugPrint('Error iniciar sesion: $e');
+
+                    if (!context.mounted) return;
+
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('No se pudop iniciar sesion'))
+                    );
 
                   }
                 }, 
                 style: ElevatedButton.styleFrom(
-                  disabledBackgroundColor: Color.fromARGB(255, 194, 216, 249),
-                  disabledForegroundColor: Color.fromARGB(255, 0, 0, 0),
+                  backgroundColor: Color.fromARGB(255, 194, 216, 249),
+                  foregroundColor: Color.fromARGB(255, 0, 0, 0),
                   padding: EdgeInsets.all(18)
                 ),
                 child: Text('Continuar con google')
