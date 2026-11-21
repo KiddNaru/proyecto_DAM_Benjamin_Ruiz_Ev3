@@ -4,6 +4,9 @@ import '../services/fs_service.dart';
 import 'package:intl/intl.dart';
 import 'dart:typed_data';
 import 'package:image_picker/image_picker.dart';
+import 'dart:convert';
+import 'package:firebase_auth/firebase_auth.dart';
+
 
 class PublicarPage extends StatefulWidget {
   const PublicarPage({super.key});
@@ -37,9 +40,9 @@ class _PublicarPageState extends State<PublicarPage> {
     super.dispose();
   }
 
-  Future<void> seleccionarFoto() async {
+  Future<void> seleccionarFoto(ImageSource origen) async {
     final XFile? foto = await ImagePicker().pickImage(
-      source: ImageSource.gallery,
+      source: origen,
       maxWidth: 1024,
       maxHeight: 1024,
       imageQuality: 60,
@@ -293,9 +296,16 @@ class _PublicarPageState extends State<PublicarPage> {
                 SizedBox(height: 25,),
           
                 ElevatedButton.icon(
-                  onPressed: seleccionarFoto, 
+                  onPressed: () => seleccionarFoto(ImageSource.gallery), 
                   icon: Icon(Icons.photo_library),
                   label: Text('Elije Foto')
+                ),
+                SizedBox(height: 25,),
+
+                ElevatedButton.icon(
+                  onPressed: () => seleccionarFoto(ImageSource.camera), 
+                  icon: Icon(Icons.camera_alt),
+                  label: Text('Foto'),
                 ),
           
                 SizedBox(height: 25,),
@@ -312,10 +322,91 @@ class _PublicarPageState extends State<PublicarPage> {
                 SizedBox(height: 25,),
           
                 ElevatedButton(
-                  onPressed: () {
-                    formKey.currentState!.validate();
+                  onPressed: () async {
+                    bool formularioValido = formKey.currentState!.validate();
+
+                    if (fotoBytes == null){
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('Es obligatorio poner foto')
+                        )
+                      );
+
+                      return;
+                    }
+
+                    if (!formularioValido) {
+                      return;
+                    }
+
+                    final usuario = FirebaseAuth.instance.currentUser;
+
+                    if (usuario == null){
+                      return;
+                    }
+
+                    DateTime fechaHora = DateTime(
+
+                      fechaSeleccionada.year,
+                      fechaSeleccionada.month,
+                      fechaSeleccionada.day,
+                      fechaSeleccionada.hour,
+                      fechaSeleccionada.minute,
+
+                    );
+
+                    final campos = [
+
+                      tituloCtrl.text.trim(),
+                      descripcionCtrl.text.trim(),
+                      tipoSeleccionado!,
+                      categoriaSeleccionada!,
+                      ubicacionCtrl.text.trim(),
+                      usuario.uid,
+                      usuario.displayName ?? 'Usuario'
+
+                    ].join();
+
+                    int tamano = fotoBytes!.lengthInBytes + utf8.encode(campos).length + 10000;
+
+                    if (tamano >= 900000){
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        content: Text('La foto pesa mucho'),
+                      ));
+
+                      return;
+                    }
+                    
+                    try {
+
+                      await FsService().agregarPublicacion(
+                        tituloCtrl.text.trim(), 
+                        descripcionCtrl.text.trim(), 
+                        tipoSeleccionado!, 
+                        categoriaSeleccionada!, 
+                        ubicacionCtrl.text.trim(), 
+                        fechaHora, 
+                        fotoBytes!, 
+                        usuario.uid, 
+                        usuario.displayName ?? 'Usuario'
+                      );
+
+                      if (!context.mounted) return;
+
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text('Publicacion guardada'))
+                      );
+
+                    } catch (e) {
+                      if (!context.mounted) return;
+
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text('Error al guardar: $e'))
+                      );
+                    }
+
                   }, 
-                  child: Text('Enviar')
+                  child: Text('Publicar')
                 )
           
               ],

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_application_1/pages/publicar_page.dart';
 import '../services/fs_service.dart';
+import 'detalle_page.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -42,39 +43,104 @@ class HomePage extends StatelessWidget {
 
             Expanded(
               child: StreamBuilder<QuerySnapshot>(
-                stream: FsService().categorias(), 
-                builder: (context, snapshot){
-                  
+                stream: FsService().publicaciones(), 
+                builder: (context, snapshot) {
+
                   if (snapshot.hasError){
+
                     return Center(
-                      child: Text('Error: ${snapshot.error}'),
+                      child: Text('Error al cargar las publicaciones'),
                     );
+
                   }
 
-                  if (!snapshot.hasData){
+                  if (!snapshot.hasData) {
+
                     return Center(
                       child: CircularProgressIndicator(),
                     );
+
                   }
 
-                  var categorias = snapshot.data!.docs;
+                  var publicaciones = snapshot.data!.docs;
 
-                  return ListView.separated( 
+                  if (publicaciones.isEmpty){
+                    return Center(
+                      child: Text('No hay publicacionbes'),
+                    );
+                  }
+
+                  return ListView.separated(
+                    itemCount: publicaciones.length,
                     separatorBuilder: (context, index) {
-                      return Divider();
-                    }, 
-                    itemCount: categorias.length,
-                    itemBuilder: (context, index){
-                      var categoria = categorias[index];
+                      return SizedBox(height: 12);
+                    },
 
-                      return ListTile(
-                        title: Text(categoria['nombre']),
+                    itemBuilder: (context, index) {
+                      var publicacion = publicaciones[index];
+
+                      Blob foto = publicacion['foto'] as Blob;
+
+                      return Container(
+                        padding: EdgeInsets.all(12),
+
+                        decoration: BoxDecoration(color: Color.fromARGB(255, 125, 101, 244)),
+
+                        child: Row(
+                          children: [
+                            Image.memory(
+                              foto.bytes,
+                              width: 85,
+                              height: 85,
+                              fit: BoxFit.cover,
+                            ),
+
+                            SizedBox(width: 15,),
+
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+
+                                children: [
+                                  Text(
+                                    publicacion['titulo'],
+                                    style: TextStyle(color: Colors.white, fontSize: 17, fontWeight: FontWeight.bold),
+                                  ),
+
+                                  SizedBox(height: 6,),
+
+                                  Text(
+                                    '${publicacion['tipo']} - ${publicacion['categoria']}', style: TextStyle(color: Colors.white54),
+                                  ),
+
+                                  SizedBox(height: 8,),
+
+                                  Text(
+                                    publicacion['estado'],
+                                    style: TextStyle(color: Color.fromARGB(255, 114, 184, 255)),
+                                  )
+                                ],
+                              )
+                            ),
+
+                            IconButton(
+                              onPressed: () {
+                                Navigator.push(context, MaterialPageRoute(
+                                  builder: (context) => DetallePage(publicacion: publicacion)
+                                  )
+                                );
+                              }, 
+                              icon: Icon(Icons.chevron_right, color: Colors.white,)
+                            )
+                          ],
+                        ),
                       );
-                    }, 
+                    },
                   );
 
                 }
               )
+
             )
           ],
         ),
