@@ -36,4 +36,12 @@ class FsService {
   Stream<QuerySnapshot> publicaciones(){
     return FirebaseFirestore.instance.collection('publicaciones').snapshots();
   }
+
+  Future<void> devuelto(String id){
+    return FirebaseFirestore.instance.collection('publicaciones').doc(id).update({'estado': 'Devuelto'});
+  }
+
+  Future<void> eliminar(String id){
+    return FirebaseFirestore.instance.collection('publicaciones').doc(id).delete();
+  }
 }

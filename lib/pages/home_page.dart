@@ -5,8 +5,16 @@ import 'package:flutter_application_1/pages/publicar_page.dart';
 import '../services/fs_service.dart';
 import 'detalle_page.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({super.key});
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+
+  bool publicacionesUsuario = false;
 
   @override
   Widget build(BuildContext context) {
@@ -41,6 +49,15 @@ class HomePage extends StatelessWidget {
 
             SizedBox(height: 50,),
 
+            TextButton(
+              onPressed: () {
+                setState(() {
+                  publicacionesUsuario = !publicacionesUsuario;
+                });
+              }, 
+              child: Text(publicacionesUsuario?'Ver todas las publicaciones':'Ver mis publicacioens', style: TextStyle(color: Color.fromARGB(255, 121, 114, 255)),)
+            ),
+
             Expanded(
               child: StreamBuilder<QuerySnapshot>(
                 stream: FsService().publicaciones(), 
@@ -63,6 +80,12 @@ class HomePage extends StatelessWidget {
                   }
 
                   var publicaciones = snapshot.data!.docs;
+
+                  if(publicacionesUsuario) {
+                    publicaciones = publicaciones.where((publicacion){
+                      return publicacion['autorUid'] == FirebaseAuth.instance.currentUser?.uid;
+                    }).toList();
+                  }
 
                   if (publicaciones.isEmpty){
                     return Center(
