@@ -397,6 +397,8 @@ class _PublicarPageState extends State<PublicarPage> {
                         SnackBar(content: Text('Publicacion guardada'))
                       );
 
+                      Navigator.pop(context);
+
                     } catch (e) {
                       if (!context.mounted) return;
 
