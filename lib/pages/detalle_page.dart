@@ -41,7 +41,11 @@ class DetallePage extends StatelessWidget {
 
               SizedBox(height: 15,),
 
-              Text('Tipo: ${publicacion['tipo']}' ,style: TextStyle(color: Color.fromARGB(255, 210, 114, 255)),),
+              Text('Tipo: ${publicacion['tipo']}' ,style: TextStyle(color: Color.fromARGB(255, 255, 255, 255)),),
+
+              SizedBox(height: 15,),
+
+              Text('Categoria: ${publicacion['categoria']}' ,style: TextStyle(color: Color.fromARGB(255, 255, 255, 255)),),
 
               SizedBox(height: 10,),
 

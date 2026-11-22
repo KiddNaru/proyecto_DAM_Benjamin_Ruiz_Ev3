@@ -22,11 +22,11 @@ class _HomePageState extends State<HomePage> {
     final usuario = FirebaseAuth.instance.currentUser;
 
     return Scaffold(
-      backgroundColor: Color.fromARGB(255, 147, 162, 234),
+      backgroundColor: Color.fromARGB(255, 181, 190, 233),
 
       appBar: AppBar(
 
-        backgroundColor: Color.fromARGB(255, 147, 162, 234),
+        backgroundColor: Color.fromARGB(255, 170, 179, 224),
         title: Text('Hola, ${usuario?.displayName ?? "Usuario"}', style: TextStyle(color: Colors.white, fontSize: 27),),
         actions: [
           IconButton(
@@ -107,7 +107,7 @@ class _HomePageState extends State<HomePage> {
                       return Container(
                         padding: EdgeInsets.all(12),
 
-                        decoration: BoxDecoration(color: Color.fromARGB(255, 125, 101, 244)),
+                        decoration: BoxDecoration(color: Color.fromARGB(255, 153, 135, 241)),
 
                         child: Row(
                           children: [
@@ -140,7 +140,7 @@ class _HomePageState extends State<HomePage> {
 
                                   Text(
                                     publicacion['estado'],
-                                    style: TextStyle(color: Color.fromARGB(255, 114, 184, 255)),
+                                    style: TextStyle(color: publicacion['estado'] == 'Devuelto'?const Color.fromARGB(255, 120, 181, 239): const Color.fromARGB(255, 182, 61, 61)),
                                   )
                                 ],
                               )

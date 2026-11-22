@@ -31,6 +31,8 @@ class _PublicarPageState extends State<PublicarPage> {
   String? tipoSeleccionado;
   String? categoriaSeleccionada;
 
+  bool guardando = false;
+
   @override
 
   void dispose(){
@@ -322,7 +324,7 @@ class _PublicarPageState extends State<PublicarPage> {
                 SizedBox(height: 25,),
           
                 ElevatedButton(
-                  onPressed: () async {
+                  onPressed: guardando ? null : () async {
                     bool formularioValido = formKey.currentState!.validate();
 
                     if (fotoBytes == null){
@@ -350,8 +352,8 @@ class _PublicarPageState extends State<PublicarPage> {
                       fechaSeleccionada.year,
                       fechaSeleccionada.month,
                       fechaSeleccionada.day,
-                      fechaSeleccionada.hour,
-                      fechaSeleccionada.minute,
+                      horaSeleccionada.hour,
+                      horaSeleccionada.minute,
 
                     );
 
@@ -376,6 +378,10 @@ class _PublicarPageState extends State<PublicarPage> {
 
                       return;
                     }
+
+                    setState(() {
+                      guardando = true;
+                    });
                     
                     try {
 
@@ -405,6 +411,12 @@ class _PublicarPageState extends State<PublicarPage> {
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(content: Text('Error al guardar: $e'))
                       );
+                    } finally {
+                      if (mounted){
+                        setState(() {
+                          guardando = false;
+                        });
+                      }
                     }
 
                   }, 
